@@ -176,11 +176,24 @@ func (c *Contract) SendConfidentialRequest(method string, args []interface{}, co
 }
 
 type Framework struct {
-	config        *Config
+	Config        *Config
 	KettleAddress common.Address
 
 	Suave *Chain
 	L1    *Chain
+}
+
+func (f *Framework) NewContract(contractAdx common.Address, path string) *Contract {
+	artifact, _ := ReadArtifact(path)
+	contract := sdk.GetContract(contractAdx, artifact.Abi, f.Suave.clt)
+
+	return &Contract{
+		addr:       contractAdx,
+		clt:        f.Suave.clt,
+		kettleAddr: f.KettleAddress,
+		Abi:        artifact.Abi,
+		contract:   contract,
+	}
 }
 
 type Config struct {
@@ -231,7 +244,7 @@ func New(opts ...ConfigOption) *Framework {
 	suaveClt.WithEIP712()
 
 	fr := &Framework{
-		config:        &config,
+		Config:        &config,
 		KettleAddress: accounts[0],
 		Suave:         &Chain{rpc: kettleRPC, clt: suaveClt, kettleAddr: accounts[0]},
 	}
