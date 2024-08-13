@@ -9,6 +9,7 @@ replace github.com/ethereum/go-ethereum => github.com/flashbots/suave-geth v0.2.
 require (
 	github.com/ethereum/go-ethereum v1.12.0
 	github.com/sethvargo/go-envconfig v1.0.0
+	github.com/sirupsen/logrus v1.9.0
 )
 
 require (
